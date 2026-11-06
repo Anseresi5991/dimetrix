@@ -1,0 +1,104 @@
+﻿@model ProveedorDTO
+@{
+    ViewBag.Title = Model.Proveedor_Id == 0 ? "Crear proveedor" : "Editar proveedor";
+    List<DepartamentoDTO> departamentos = ViewBag.Departamentos as List<DepartamentoDTO> ?? new List<DepartamentoDTO>();
+    List<CiudadDTO> ciudades = ViewBag.Ciudades as List<CiudadDTO> ?? new List<CiudadDTO>();
+}
+<h2 class="titulo">@ViewBag.Title</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form method="post" action="@Url.Action("Guardar")" class="formulario">
+    <input type="hidden" name="Proveedor_Id" value="@Model.Proveedor_Id" />
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="Nit">NIT (sin DV)</label>
+            <input type="text" class="form-control" id="Nit" name="Nit" value="@Model.Nit" maxlength="20" />
+        </div>
+        <div class="col-sm-2 form-group">
+            <label for="DV">DV</label>
+            <input type="text" class="form-control" id="DV" name="DV" value="@Model.DV" readonly />
+        </div>
+        <div class="col-sm-6 form-group">
+            <label for="RazonSocial">Razón social</label>
+            <input type="text" class="form-control" id="RazonSocial" name="RazonSocial" value="@Model.RazonSocial" maxlength="200" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="Contacto">Persona de contacto</label>
+            <input type="text" class="form-control" id="Contacto" name="Contacto" value="@Model.Contacto" maxlength="100" />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="Telefono">Teléfono</label>
+            <input type="text" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" maxlength="30" />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="Email">Email</label>
+            <input type="text" class="form-control" id="Email" name="Email" value="@Model.Email" maxlength="100" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="IdDepartamento">Departamento</label>
+            <select class="form-control" id="IdDepartamento" name="IdDepartamento">
+                <option value="">Selecciona</option>
+                @foreach (var d in departamentos)
+                {
+                    <option value="@d.IdDepartamento" @(Model.IdDepartamento == d.IdDepartamento ? "selected" : "")>@d.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="IdCiudad">Ciudad</label>
+            <select class="form-control" id="IdCiudad" name="IdCiudad">
+                <option value="">Selecciona</option>
+                @foreach (var c in ciudades)
+                {
+                    <option value="@c.IdCiudad" @(Model.IdCiudad == c.IdCiudad ? "selected" : "")>@c.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="DiasPago">Días de pago</label>
+            <input type="number" class="form-control" id="DiasPago" name="DiasPago" value="@Model.DiasPago" min="0" max="180" step="1" />
+        </div>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" name="Activo" value="true" @(Model.Activo ? "checked" : "") />
+            <input type="hidden" name="Activo" value="false" />
+            Proveedor activo
+        </label>
+    </div>
+    <div class="acciones">
+        <button type="submit" class="btn btn-dm">Guardar proveedor</button>
+        <a href="@Url.Action("Index")" class="btn btn-link">Cancelar</a>
+    </div>
+</form>
+
+<script>
+    // AP: copia pegada del JS del formulario de clientes
+    $(function () {
+        $('#Nit').keyup(function () { $('#DV').val(calcularDV($(this).val())); });
+
+        $('#IdDepartamento').change(function () {
+            var id = $(this).val();
+            $('#IdCiudad').html('<option value="">Cargando...</option>');
+            if (id == '') {
+                $('#IdCiudad').html('<option value="">Selecciona</option>');
+                return;
+            }
+            $.getJSON('@Url.Action("Ciudades", "Proveedores")', { idDepartamento: id }, function (data) {
+                var html = '<option value="">Selecciona</option>';
+                for (var i = 0; i < data.length; i++) {
+                    html += '<option value="' + data[i].IdCiudad + '">' + data[i].Nombre + '</option>';
+                }
+                $('#IdCiudad').html(html);
+            });
+        });
+    });
+</script>

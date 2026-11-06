@@ -1,0 +1,112 @@
+﻿@model ProductoDTO
+@{
+    ViewBag.Title = Model.IdProducto == 0 ? "Crear producto" : "Editar producto";
+    List<CategoriaDTO> categorias = ViewBag.Categorias as List<CategoriaDTO> ?? new List<CategoriaDTO>();
+    string[] unidades = new string[] { "UND", "CAJA", "PAQ", "KG" };
+    int[] ivas = new int[] { 0, 5, 19 };
+}
+<h2 class="titulo">@ViewBag.Title</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form method="post" action="@Url.Action("Guardar")" class="formulario">
+    <input type="hidden" name="IdProducto" value="@Model.IdProducto" />
+    <div class="row">
+        <div class="col-sm-3 form-group">
+            <label for="Codigo">Código</label>
+            <input type="text" class="form-control" id="Codigo" name="Codigo" value="@Model.Codigo" maxlength="20" />
+        </div>
+        <div class="col-sm-3 form-group">
+            <label for="CodigoBarras">Código de barras</label>
+            <input type="text" class="form-control" id="CodigoBarras" name="CodigoBarras" value="@Model.CodigoBarras" maxlength="20" />
+        </div>
+        <div class="col-sm-6 form-group">
+            <label for="Nombre">Nombre</label>
+            <input type="text" class="form-control" id="Nombre" name="Nombre" value="@Model.Nombre" maxlength="150" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Descripcion">Descripción</label>
+        <textarea class="form-control" id="Descripcion" name="Descripcion" rows="2" maxlength="500">@Model.Descripcion</textarea>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="IdCategoria">Categoría</label>
+            <select class="form-control" id="IdCategoria" name="IdCategoria">
+                <option value="0">Selecciona</option>
+                @foreach (var c in categorias)
+                {
+                    <option value="@c.IdCategoria" @(Model.IdCategoria == c.IdCategoria ? "selected" : "")>@(c.CategoriaPadre != null ? c.CategoriaPadre + " / " + c.Nombre : c.Nombre)</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="Unidad">Unidad</label>
+            <select class="form-control" id="Unidad" name="Unidad">
+                @foreach (var u in unidades)
+                {
+                    <option value="@u" @(Model.Unidad == u ? "selected" : "")>@u</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="PorcIva">IVA</label>
+            <select class="form-control" id="PorcIva" name="PorcIva">
+                @foreach (var i in ivas)
+                {
+                    <option value="@i" @(Model.PorcIva == i ? "selected" : "")>@(i)%</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="CostoPromedio">Costo promedio</label>
+            <input type="number" class="form-control" id="CostoPromedio" name="CostoPromedio" value="@FormatoHelper.TextoInput(Model.CostoPromedio)" min="0" step="1" @(Model.IdProducto > 0 ? "readonly" : "") />
+            @if (Model.IdProducto > 0)
+            {
+                <p class="help-block">Lo recalculan las recepciones de compra.</p>
+            }
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="PrecioBase">Precio base</label>
+            <input type="number" class="form-control" id="PrecioBase" name="PrecioBase" value="@FormatoHelper.TextoInput(Model.PrecioBase)" min="0" step="1" />
+            <p class="help-block" id="margen"></p>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="StockMinimo">Stock mínimo por bodega</label>
+            <input type="number" class="form-control" id="StockMinimo" name="StockMinimo" value="@FormatoHelper.TextoInput(Model.StockMinimo)" min="0" step="1" />
+        </div>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" name="Activo" value="true" @(Model.Activo ? "checked" : "") />
+            <input type="hidden" name="Activo" value="false" />
+            Producto activo
+        </label>
+    </div>
+    <div class="acciones">
+        <button type="submit" class="btn btn-dm">Guardar producto</button>
+        <a href="@Url.Action("Index")" class="btn btn-link">Cancelar</a>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        function margen() {
+            var costo = parseFloat($('#CostoPromedio').val()) || 0;
+            var precio = parseFloat($('#PrecioBase').val()) || 0;
+            if (costo > 0 && precio > 0) {
+                var m = ((precio - costo) / precio * 100).toFixed(1);
+                $('#margen').text('Margen sobre precio: ' + m + '%');
+            } else {
+                $('#margen').text('');
+            }
+        }
+        $('#CostoPromedio, #PrecioBase').on('input', margen);
+        margen();
+    });
+</script>

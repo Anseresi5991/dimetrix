@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+    System.Data.DataTable stockBajo = ViewBag.StockBajo as System.Data.DataTable;
+    System.Data.DataTable ultimas = ViewBag.UltimasFacturas as System.Data.DataTable;
+}
+
+<h2 class="titulo">Resumen</h2>
+
+<div class="row indicadores">
+    <div class="col-sm-6 col-md-3">
+        <div class="indicador">
+            <span class="ind-valor">@FormatoHelper.Moneda((decimal)ViewBag.Ventas30)</span>
+            <span class="ind-texto">Facturado en los últimos 30 días (@ViewBag.Facturas30 facturas)</span>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="indicador alerta">
+            <span class="ind-valor">@FormatoHelper.Moneda((decimal)ViewBag.CarteraVencida)</span>
+            <span class="ind-texto">Cartera vencida de @FormatoHelper.Moneda((decimal)ViewBag.CarteraTotal) por cobrar</span>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="indicador">
+            <span class="ind-valor">@ViewBag.PedidosPendientes</span>
+            <span class="ind-texto">Pedidos sin facturar (borrador o aprobados)</span>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="indicador alerta">
+            <span class="ind-valor">@ViewBag.ClientesBloqueados</span>
+            <span class="ind-texto">Clientes bloqueados por cartera</span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading">Productos en o bajo el stock mínimo (@ViewBag.TotalStockBajo en total, se muestran 10)</div>
+            <table class="table table-condensed tabla-dm">
+                <thead>
+                    <tr><th>Bodega</th><th>Código</th><th>Producto</th><th class="text-right">Disponible</th><th class="text-right">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                    @if (stockBajo != null)
+                    {
+                        foreach (System.Data.DataRow r in stockBajo.Rows)
+                        {
+                            <tr>
+                                <td>@r["Bodega"]</td>
+                                <td>@r["Codigo"]</td>
+                                <td>@r["Nombre"]</td>
+                                <td class="text-right">@FormatoHelper.Numero(Convert.ToDecimal(r["Disponible"]))</td>
+                                <td class="text-right">@FormatoHelper.Numero(Convert.ToDecimal(r["StockMinimo"]))</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <div class="panel-heading">Últimas facturas</div>
+            <table class="table table-condensed tabla-dm">
+                <tbody>
+                    @if (ultimas != null)
+                    {
+                        foreach (System.Data.DataRow r in ultimas.Rows)
+                        {
+                            <tr>
+                                <td><strong>@r["Factura"]</strong><br /><span class="text-muted small">@Convert.ToDateTime(r["Fecha"]).ToString("dd/MM/yyyy")</span></td>
+                                <td>@r["RazonSocial"]</td>
+                                <td class="text-right">@FormatoHelper.Moneda(Convert.ToDecimal(r["Total"]))</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

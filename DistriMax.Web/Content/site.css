@@ -1,0 +1,83 @@
+﻿/* DistriMax - estilos propios sobre Bootstrap 3 */
+:root {
+    --dm-azul: #17384f;
+    --dm-azul-claro: #24577a;
+    --dm-verde: #2d7a55;
+    --dm-verde-osc: #23613f;
+    --dm-ambar: #c9821b;
+    --dm-fondo: #f3f5f7;
+    --dm-texto: #23303a;
+}
+
+body {
+    padding-top: 64px;
+    background: var(--dm-fondo);
+    color: var(--dm-texto);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* Barra superior */
+.navbar-dm { background: var(--dm-azul); border: 0; border-bottom: 3px solid var(--dm-ambar); }
+.navbar-dm .navbar-brand { color: #fff; letter-spacing: .5px; }
+.navbar-dm .navbar-brand strong { color: var(--dm-ambar); }
+.navbar-dm .nav > li > a { color: #d6e2ea; }
+.navbar-dm .nav > li > a:hover,
+.navbar-dm .nav > li > a:focus,
+.navbar-dm .nav > .open > a,
+.navbar-dm .nav > .open > a:hover,
+.navbar-dm .nav > .open > a:focus { color: #fff; background: var(--dm-azul-claro); }
+.navbar-dm .nav > li.disabled > a { color: #6f8ea3; cursor: not-allowed; }
+.navbar-dm .nav > li.disabled > a:hover { background: transparent; color: #6f8ea3; }
+.navbar-dm .navbar-text { color: #fff; }
+.navbar-dm .navbar-text .rol { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 10px; background: var(--dm-azul-claro); color: #cfe0ec; font-size: 12px; }
+.navbar-dm .navbar-toggle .icon-bar { background: #fff; }
+.navbar-dm .navbar-collapse { border-color: var(--dm-azul-claro); }
+
+.contenido { max-width: 1400px; margin: 0 auto; padding-bottom: 30px; }
+.pie { margin-top: 30px; padding-top: 12px; border-top: 1px solid #dde3e8; color: #8a99a6; font-size: 12px; }
+
+/* Títulos y encabezados de página */
+.titulo { margin: 10px 0 16px; font-weight: 600; font-size: 24px; color: var(--dm-azul); }
+.encabezado { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+.encabezado .titulo { margin-bottom: 4px; }
+.filtros { margin-bottom: 14px; }
+.filtros .form-control { margin-right: 6px; margin-bottom: 6px; }
+
+/* Botón principal */
+.btn-dm { background: var(--dm-verde); border-color: var(--dm-verde-osc); color: #fff; }
+.btn-dm:hover, .btn-dm:focus, .btn-dm:active { background: var(--dm-verde-osc); color: #fff; }
+.btn:focus, .form-control:focus { outline: 2px solid var(--dm-ambar); outline-offset: 1px; }
+
+/* Tablas */
+.tabla-dm { background: #fff; }
+.tabla-dm > thead > tr > th { background: #e8edf1; color: var(--dm-azul); font-weight: 600; border-bottom: 2px solid #cfd8df; }
+.tabla-dm td { vertical-align: middle !important; }
+.nowrap { white-space: nowrap; }
+.dataTables_wrapper { background: #fff; padding: 10px; border: 1px solid #dde3e8; }
+
+/* Indicadores del inicio */
+.indicadores { margin-bottom: 10px; }
+.indicador { background: #fff; border-left: 5px solid var(--dm-verde); padding: 14px 16px; margin-bottom: 15px; min-height: 96px; }
+.indicador.alerta { border-left-color: var(--dm-ambar); }
+.ind-valor { display: block; font-size: 26px; font-weight: 600; color: var(--dm-azul); font-variant-numeric: tabular-nums; }
+.ind-texto { display: block; color: #61727f; font-size: 13px; }
+
+/* Formularios */
+.formulario { background: #fff; padding: 20px; border: 1px solid #dde3e8; max-width: 1000px; }
+.formulario fieldset { margin-bottom: 10px; }
+.formulario legend { font-size: 15px; font-weight: 600; color: var(--dm-azul-claro); border-bottom-color: #e3e8ec; margin-bottom: 12px; }
+.formulario .acciones { margin-top: 15px; padding-top: 15px; border-top: 1px solid #e3e8ec; }
+.form-control[readonly] { background: #f1f3f5; }
+
+/* Login */
+body.login { padding-top: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dm-azul); }
+.login-caja { width: 100%; max-width: 360px; background: #fff; padding: 30px; border-top: 5px solid var(--dm-ambar); margin: 20px; }
+.login-marca { margin: 0; font-size: 30px; color: var(--dm-azul); }
+.login-marca strong { color: var(--dm-ambar); }
+.login-sub { color: #61727f; margin-bottom: 22px; }
+.login-ayuda { margin: 18px 0 0; font-size: 12px; color: #8a99a6; }
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+}

@@ -1,0 +1,68 @@
+﻿@model List<ClienteDTO>
+@{
+    ViewBag.Title = "Clientes";
+}
+<div class="encabezado">
+    <h2 class="titulo">Clientes</h2>
+    <a href="@Url.Action("Crear")" class="btn btn-dm">Crear cliente</a>
+</div>
+
+<form method="get" action="@Url.Action("Index")" class="form-inline filtros">
+    <input type="text" name="buscar" class="form-control" placeholder="Nombre o documento" value="@ViewBag.Buscar" />
+    <button type="submit" class="btn btn-default">Buscar</button>
+    @if (!string.IsNullOrEmpty((string)ViewBag.Buscar))
+    {
+        <a href="@Url.Action("Index")" class="btn btn-link">Quitar filtro</a>
+    }
+</form>
+
+<table id="tblClientes" class="table table-striped table-condensed tabla-dm">
+    <thead>
+        <tr>
+            <th>Documento</th><th>Razón social</th><th>Ciudad</th><th>Vendedor</th><th>Lista</th>
+            <th class="text-right">Cupo</th><th class="text-right">Saldo</th><th>Estado</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr class="@(c.Bloqueado ? "danger" : "")">
+                <td class="nowrap">@(c.TipoDocumento + " " + c.NumeroDocumento + (string.IsNullOrEmpty(c.DV) ? "" : "-" + c.DV))</td>
+                <td>
+                    @c.RazonSocial
+                    @if (!string.IsNullOrEmpty(c.NombreComercial) && c.NombreComercial != c.RazonSocial)
+                    {
+                        <br /><span class="text-muted small">@c.NombreComercial</span>
+                    }
+                </td>
+                <td>@c.Ciudad</td>
+                <td>@c.Vendedor</td>
+                <td>@c.ListaPrecios</td>
+                <td class="text-right" data-order="@FormatoHelper.TextoInput(c.CupoCredito)">@(c.DiasCredito == 0 ? "Contado" : FormatoHelper.Moneda(c.CupoCredito))</td>
+                <td class="text-right" data-order="@FormatoHelper.TextoInput(c.Saldo)">@FormatoHelper.Moneda(c.Saldo)</td>
+                <td>
+                    @if (c.Bloqueado)
+                    {
+                        <span class="label label-danger" title="@c.MotivoBloqueo">Bloqueado</span>
+                    }
+                    else if (!c.Activo)
+                    {
+                        <span class="label label-default">Inactivo</span>
+                    }
+                    else
+                    {
+                        <span class="label label-success">Activo</span>
+                    }
+                </td>
+                <td class="text-right nowrap">
+                    <a href="@Url.Action("Detalle", new { id = c.IdCliente })" class="btn btn-xs btn-default">Ver</a>
+                    <a href="@Url.Action("Editar", new { id = c.IdCliente })" class="btn btn-xs btn-default">Editar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () { DM.tabla('#tblClientes', { order: [[1, 'asc']] }); });
+</script>

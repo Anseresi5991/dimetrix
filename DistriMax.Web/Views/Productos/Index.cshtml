@@ -1,0 +1,69 @@
+﻿@model List<ProductoDTO>
+@{
+    ViewBag.Title = "Productos";
+    bool puedeEditar = (bool)ViewBag.PuedeEditar;
+    bool verCostos = (bool)ViewBag.VerCostos;
+    List<CategoriaDTO> categorias = ViewBag.Categorias as List<CategoriaDTO> ?? new List<CategoriaDTO>();
+    int? idCategoria = ViewBag.IdCategoria as int?;
+}
+<div class="encabezado">
+    <h2 class="titulo">Productos</h2>
+    @if (puedeEditar)
+    {
+        <a href="@Url.Action("Crear")" class="btn btn-dm">Crear producto</a>
+    }
+</div>
+
+<form method="get" action="@Url.Action("Index")" class="form-inline filtros">
+    <input type="text" name="buscar" class="form-control" placeholder="Nombre, código o código de barras" value="@ViewBag.Buscar" />
+    <select name="idCategoria" class="form-control">
+        <option value="">Todas las categorías</option>
+        @foreach (var c in categorias)
+        {
+            <option value="@c.IdCategoria" @(idCategoria == c.IdCategoria ? "selected" : "")>@(c.CategoriaPadre != null ? c.CategoriaPadre + " / " + c.Nombre : c.Nombre)</option>
+        }
+    </select>
+    <button type="submit" class="btn btn-default">Filtrar</button>
+</form>
+
+<table id="tblProductos" class="table table-striped table-condensed tabla-dm">
+    <thead>
+        <tr>
+            <th>Código</th><th>Producto</th><th>Categoría</th><th>Unidad</th><th class="text-right">IVA</th>
+            @if (verCostos)
+            {
+                <th class="text-right">Costo promedio</th>
+            }
+            <th class="text-right">Precio base</th><th class="text-right">Stock total</th><th>Estado</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td><code>@p.Codigo</code></td>
+                <td>@p.Nombre</td>
+                <td>@p.Categoria</td>
+                <td>@p.Unidad</td>
+                <td class="text-right">@FormatoHelper.Numero(p.PorcIva)%</td>
+                @if (verCostos)
+                {
+                    <td class="text-right" data-order="@FormatoHelper.TextoInput(p.CostoPromedio)">@FormatoHelper.Moneda(p.CostoPromedio)</td>
+                }
+                <td class="text-right" data-order="@FormatoHelper.TextoInput(p.PrecioBase)">@FormatoHelper.Moneda(p.PrecioBase)</td>
+                <td class="text-right @(p.StockTotal <= p.StockMinimo ? "text-danger" : "")" data-order="@FormatoHelper.TextoInput(p.StockTotal)">@FormatoHelper.Numero(p.StockTotal)</td>
+                <td>@Html.Raw(p.Activo ? "<span class=\"label label-success\">Activo</span>" : "<span class=\"label label-default\">Inactivo</span>")</td>
+                <td class="text-right">
+                    @if (puedeEditar)
+                    {
+                        <a href="@Url.Action("Editar", new { id = p.IdProducto })" class="btn btn-xs btn-default">Editar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () { DM.tabla('#tblProductos', { order: [[1, 'asc']] }); });
+</script>

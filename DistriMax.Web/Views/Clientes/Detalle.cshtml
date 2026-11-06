@@ -1,0 +1,64 @@
+﻿@model ClienteDTO
+@{
+    ViewBag.Title = Model.RazonSocial;
+    SaldoClienteDTO saldo = ViewBag.Saldo as SaldoClienteDTO;
+}
+<div class="encabezado">
+    <div>
+        <h2 class="titulo">@Model.RazonSocial</h2>
+        <p class="text-muted">@(Model.TipoDocumento + " " + Model.NumeroDocumento + (string.IsNullOrEmpty(Model.DV) ? "" : "-" + Model.DV))</p>
+    </div>
+    <div>
+        <a href="@Url.Action("Editar", new { id = Model.IdCliente })" class="btn btn-dm">Editar cliente</a>
+        <a href="@Url.Action("Index")" class="btn btn-link">Volver al listado</a>
+    </div>
+</div>
+
+@if (Model.Bloqueado)
+{
+    <div class="alert alert-danger"><strong>Cliente bloqueado.</strong> @Model.MotivoBloqueo</div>
+}
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading">Datos del cliente</div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Nombre comercial</dt><dd>@Model.NombreComercial</dd>
+                    <dt>Dirección</dt><dd>@Model.Direccion</dd>
+                    <dt>Ciudad</dt><dd>@Model.Ciudad, @Model.Departamento</dd>
+                    <dt>Teléfono</dt><dd>@Model.Telefono</dd>
+                    <dt>Email</dt><dd>@Model.Email</dd>
+                    <dt>Vendedor</dt><dd>@Model.Vendedor</dd>
+                    <dt>Lista de precios</dt><dd>@Model.ListaPrecios</dd>
+                    <dt>Cliente desde</dt><dd>@FormatoHelper.Fecha(Model.FechaCreacion)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <div class="panel-heading">Crédito y cartera</div>
+            <div class="panel-body">
+                @if (Model.DiasCredito == 0)
+                {
+                    <p>Cliente de <strong>contado</strong>.</p>
+                }
+                else
+                {
+                    <p>Crédito a <strong>@Model.DiasCredito días</strong></p>
+                }
+                @if (saldo != null)
+                {
+                    <table class="table table-condensed">
+                        <tr><td>Cupo</td><td class="text-right">@FormatoHelper.Moneda(saldo.CupoCredito)</td></tr>
+                        <tr><td>Saldo pendiente</td><td class="text-right">@FormatoHelper.Moneda(saldo.Saldo)</td></tr>
+                        <tr class="@(saldo.SaldoVencido > 0 ? "danger" : "")"><td>Saldo vencido</td><td class="text-right">@FormatoHelper.Moneda(saldo.SaldoVencido)</td></tr>
+                        <tr><td><strong>Disponible</strong></td><td class="text-right"><strong>@FormatoHelper.Moneda(saldo.Disponible)</strong></td></tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

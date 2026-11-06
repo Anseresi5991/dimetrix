@@ -1,0 +1,66 @@
+﻿@model UsuarioDTO
+@{
+    ViewBag.Title = Model.IdUsuario == 0 ? "Crear usuario" : "Editar usuario";
+    List<RolDTO> roles = ViewBag.Roles as List<RolDTO> ?? new List<RolDTO>();
+}
+<h2 class="titulo">@ViewBag.Title</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form method="post" action="@Url.Action("Guardar")" class="formulario">
+    <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="Login">Usuario</label>
+            <input type="text" class="form-control" id="Login" name="Login" value="@Model.Login" maxlength="50" />
+        </div>
+        <div class="col-sm-8 form-group">
+            <label for="Nombre">Nombre completo</label>
+            <input type="text" class="form-control" id="Nombre" name="Nombre" value="@Model.Nombre" maxlength="100" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" maxlength="100" />
+        </div>
+        <div class="col-sm-6 form-group">
+            <label for="IdRol">Rol</label>
+            <select class="form-control" id="IdRol" name="IdRol">
+                <option value="0">Selecciona un rol</option>
+                @foreach (var r in roles)
+                {
+                    <option value="@r.IdRol" @(Model.IdRol == r.IdRol ? "selected" : "")>@r.Nombre</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group">
+            <label for="Password">Contraseña</label>
+            <input type="password" class="form-control" id="Password" name="Password" autocomplete="new-password" />
+            @if (Model.IdUsuario > 0)
+            {
+                <p class="help-block">Déjala vacía para conservar la actual.</p>
+            }
+        </div>
+        <div class="col-sm-6 form-group">
+            <label for="ConfirmarPassword">Confirmar contraseña</label>
+            <input type="password" class="form-control" id="ConfirmarPassword" name="ConfirmarPassword" autocomplete="new-password" />
+        </div>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" name="Activo" value="true" @(Model.Activo ? "checked" : "") />
+            <input type="hidden" name="Activo" value="false" />
+            Usuario activo
+        </label>
+    </div>
+    <div class="acciones">
+        <button type="submit" class="btn btn-dm">Guardar usuario</button>
+        <a href="@Url.Action("Index")" class="btn btn-link">Cancelar</a>
+    </div>
+</form>

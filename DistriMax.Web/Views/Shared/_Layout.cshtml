@@ -1,0 +1,107 @@
+﻿@{
+    UsuarioDTO usuarioActual = Session["Usuario"] as UsuarioDTO;
+    int rolActual = usuarioActual != null ? usuarioActual.IdRol : 0;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - DistriMax</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/site.css" />
+    @* Todo el JS en el head, "para que funcione el inline de las vistas" *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/distrimax.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-dm navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-principal">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index", "Home")">Distri<strong>Max</strong></a>
+            </div>
+            <div class="collapse navbar-collapse" id="menu-principal">
+                <ul class="nav navbar-nav">
+                    <li><a href="@Url.Action("Index", "Home")">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maestros <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @* AP-09: menú armado con ifs por rol *@
+                            @if (rolActual != 4)
+                            {
+                                <li><a href="@Url.Action("Index", "Clientes")">Clientes</a></li>
+                            }
+                            @if (rolActual == 1 || rolActual == 2 || rolActual == 4)
+                            {
+                                <li><a href="@Url.Action("Index", "Proveedores")">Proveedores</a></li>
+                            }
+                            <li><a href="@Url.Action("Index", "Productos")">Productos</a></li>
+                        </ul>
+                    </li>
+                    @if (rolActual == 1 || rolActual == 2 || rolActual == 4)
+                    {
+                        <li class="disabled"><a href="#" title="Próxima fase">Inventario</a></li>
+                        <li class="disabled"><a href="#" title="Próxima fase">Compras</a></li>
+                    }
+                    @if (rolActual == 1 || rolActual == 2 || rolActual == 3)
+                    {
+                        <li class="disabled"><a href="#" title="Próxima fase">Pedidos</a></li>
+                        <li class="disabled"><a href="#" title="Próxima fase">Facturas</a></li>
+                    }
+                    @if (rolActual == 1 || rolActual == 2 || rolActual == 5)
+                    {
+                        <li class="disabled"><a href="#" title="Próxima fase">Cartera</a></li>
+                    }
+                    @if (rolActual == 1 || rolActual == 2)
+                    {
+                        <li class="disabled"><a href="#" title="Próxima fase">Reportes</a></li>
+                    }
+                    @if (rolActual == 1)
+                    {
+                        <li><a href="@Url.Action("Index", "Usuarios")">Usuarios</a></li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (usuarioActual != null)
+                    {
+                        <li><p class="navbar-text">@usuarioActual.Nombre <span class="rol">@usuarioActual.Rol</span></p></li>
+                        <li><a href="@Url.Action("Logout", "Account")">Cerrar sesión</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid contenido">
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                @TempData["Mensaje"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                @TempData["Error"]
+            </div>
+        }
+
+        @RenderBody()
+
+        <footer class="pie">DistriMax v2.3.1 &middot; @DateTime.Now.Year</footer>
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

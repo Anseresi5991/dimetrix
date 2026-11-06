@@ -1,0 +1,39 @@
+﻿@model List<ProveedorDTO>
+@{
+    ViewBag.Title = "Proveedores";
+}
+<div class="encabezado">
+    <h2 class="titulo">Proveedores</h2>
+    <a href="@Url.Action("Crear")" class="btn btn-dm">Crear proveedor</a>
+</div>
+
+<form method="get" action="@Url.Action("Index")" class="form-inline filtros">
+    <input type="text" name="buscar" class="form-control" placeholder="Nombre o NIT" value="@ViewBag.Buscar" />
+    <button type="submit" class="btn btn-default">Buscar</button>
+</form>
+
+<table id="tblProveedores" class="table table-striped table-condensed tabla-dm">
+    <thead>
+        <tr><th>NIT</th><th>Razón social</th><th>Contacto</th><th>Teléfono</th><th>Email</th><th>Ciudad</th><th class="text-right">Días de pago</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td class="nowrap">@(p.Nit + "-" + p.DV)</td>
+                <td>@p.RazonSocial</td>
+                <td>@p.Contacto</td>
+                <td class="nowrap">@p.Telefono</td>
+                <td>@p.Email</td>
+                <td>@p.Ciudad</td>
+                <td class="text-right">@p.DiasPago</td>
+                <td>@Html.Raw(p.Activo ? "<span class=\"label label-success\">Activo</span>" : "<span class=\"label label-default\">Inactivo</span>")</td>
+                <td class="text-right"><a href="@Url.Action("Editar", new { id = p.Proveedor_Id })" class="btn btn-xs btn-default">Editar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () { DM.tabla('#tblProveedores', { order: [[1, 'asc']] }); });
+</script>

@@ -1,0 +1,203 @@
+﻿@model ClienteDTO
+@{
+    ViewBag.Title = Model.IdCliente == 0 ? "Crear cliente" : "Editar cliente";
+    int rol = (int)Session["IdRol"];
+    bool puedeCredito = rol == 1 || rol == 2 || rol == 5;
+    List<DepartamentoDTO> departamentos = ViewBag.Departamentos as List<DepartamentoDTO> ?? new List<DepartamentoDTO>();
+    List<CiudadDTO> ciudades = ViewBag.Ciudades as List<CiudadDTO> ?? new List<CiudadDTO>();
+    List<ListaPrecioDTO> listas = ViewBag.Listas as List<ListaPrecioDTO> ?? new List<ListaPrecioDTO>();
+    List<VendedorDTO> vendedores = ViewBag.Vendedores as List<VendedorDTO> ?? new List<VendedorDTO>();
+}
+<h2 class="titulo">@ViewBag.Title</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form method="post" action="@Url.Action("Guardar")" class="formulario">
+    <input type="hidden" name="IdCliente" value="@Model.IdCliente" />
+
+    <fieldset>
+        <legend>Identificación</legend>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label for="TipoDocumento">Tipo de documento</label>
+                <select class="form-control" id="TipoDocumento" name="TipoDocumento">
+                    <option value="NIT" @(Model.TipoDocumento == "NIT" ? "selected" : "")>NIT</option>
+                    <option value="CC" @(Model.TipoDocumento == "CC" ? "selected" : "")>Cédula</option>
+                </select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="NumeroDocumento">Número</label>
+                <input type="text" class="form-control" id="NumeroDocumento" name="NumeroDocumento" value="@Model.NumeroDocumento" maxlength="20" />
+            </div>
+            <div class="col-sm-2 form-group" id="grupoDV">
+                <label for="DV">DV</label>
+                <input type="text" class="form-control" id="DV" name="DV" value="@Model.DV" readonly />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label for="RazonSocial">Razón social o nombre</label>
+                <input type="text" class="form-control" id="RazonSocial" name="RazonSocial" value="@Model.RazonSocial" maxlength="200" />
+            </div>
+            <div class="col-sm-6 form-group">
+                <label for="NombreComercial">Nombre comercial</label>
+                <input type="text" class="form-control" id="NombreComercial" name="NombreComercial" value="@Model.NombreComercial" maxlength="200" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Ubicación y contacto</legend>
+        <div class="row">
+            <div class="col-sm-4 form-group">
+                <label for="IdDepartamento">Departamento</label>
+                <select class="form-control" id="IdDepartamento" name="IdDepartamento">
+                    <option value="">Selecciona</option>
+                    @foreach (var d in departamentos)
+                    {
+                        <option value="@d.IdDepartamento" @(Model.IdDepartamento == d.IdDepartamento ? "selected" : "")>@d.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="IdCiudad">Ciudad</label>
+                <select class="form-control" id="IdCiudad" name="IdCiudad">
+                    <option value="">Selecciona</option>
+                    @foreach (var c in ciudades)
+                    {
+                        <option value="@c.IdCiudad" @(Model.IdCiudad == c.IdCiudad ? "selected" : "")>@c.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="Direccion">Dirección</label>
+                <input type="text" class="form-control" id="Direccion" name="Direccion" value="@Model.Direccion" maxlength="200" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 form-group">
+                <label for="Telefono">Teléfono</label>
+                <input type="text" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" maxlength="30" />
+            </div>
+            <div class="col-sm-8 form-group">
+                <label for="Email">Email</label>
+                <input type="text" class="form-control" id="Email" name="Email" value="@Model.Email" maxlength="100" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Condiciones comerciales</legend>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label for="IdLista">Lista de precios</label>
+                <select class="form-control" id="IdLista" name="IdLista">
+                    @foreach (var l in listas)
+                    {
+                        <option value="@l.IdLista" @(Model.IdLista == l.IdLista ? "selected" : "")>@l.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3 form-group">
+                <label for="IdVendedor">Vendedor</label>
+                <select class="form-control" id="IdVendedor" name="IdVendedor">
+                    <option value="">Selecciona</option>
+                    @foreach (var v in vendedores)
+                    {
+                        <option value="@v.IdUsuario" @(Model.IdVendedor == v.IdUsuario ? "selected" : "")>@v.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3 form-group">
+                <label for="DiasCredito">Días de crédito</label>
+                <input type="number" class="form-control" id="DiasCredito" name="DiasCredito" value="@Model.DiasCredito" min="0" max="120" step="1" @(puedeCredito ? "" : "readonly") />
+                <p class="help-block">0 = contado</p>
+            </div>
+            <div class="col-sm-3 form-group">
+                <label for="CupoCredito">Cupo de crédito</label>
+                <input type="number" class="form-control" id="CupoCredito" name="CupoCredito" value="@FormatoHelper.TextoInput(Model.CupoCredito)" min="0" step="1" @(puedeCredito ? "" : "readonly") />
+            </div>
+        </div>
+        @if (!puedeCredito)
+        {
+            <p class="text-muted small">Los clientes nuevos que crea un vendedor quedan de contado. Cartera o gerencia asignan el crédito.</p>
+        }
+
+        @if (puedeCredito && Model.IdCliente > 0)
+        {
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="Bloqueado" value="true" id="Bloqueado" @(Model.Bloqueado ? "checked" : "") />
+                            <input type="hidden" name="Bloqueado" value="false" />
+                            Cliente bloqueado
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-9 form-group">
+                    <input type="text" class="form-control" id="MotivoBloqueo" name="MotivoBloqueo" value="@Model.MotivoBloqueo" placeholder="Motivo del bloqueo" maxlength="200" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <input type="hidden" name="Bloqueado" value="@(Model.Bloqueado ? "true" : "false")" />
+            <input type="hidden" name="MotivoBloqueo" value="@Model.MotivoBloqueo" />
+        }
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="Activo" value="true" @(Model.Activo ? "checked" : "") />
+                <input type="hidden" name="Activo" value="false" />
+                Cliente activo
+            </label>
+        </div>
+    </fieldset>
+
+    <div class="acciones">
+        <button type="submit" class="btn btn-dm">Guardar cliente</button>
+        <a href="@Url.Action("Index")" class="btn btn-link">Cancelar</a>
+    </div>
+</form>
+
+<script>
+    // JS inline en la vista, con HTML armado por concatenación (AP)
+    $(function () {
+        function actualizarDV() {
+            if ($('#TipoDocumento').val() == 'NIT') {
+                $('#grupoDV').show();
+                $('#DV').val(calcularDV($('#NumeroDocumento').val()));
+            } else {
+                $('#grupoDV').hide();
+                $('#DV').val('');
+            }
+        }
+        $('#TipoDocumento').change(actualizarDV);
+        $('#NumeroDocumento').keyup(actualizarDV);
+        actualizarDV();
+
+        $('#IdDepartamento').change(function () {
+            var id = $(this).val();
+            $('#IdCiudad').html('<option value="">Cargando...</option>');
+            if (id == '') {
+                $('#IdCiudad').html('<option value="">Selecciona</option>');
+                return;
+            }
+            $.getJSON('@Url.Action("Ciudades", "Clientes")', { idDepartamento: id }, function (data) {
+                var html = '<option value="">Selecciona</option>';
+                for (var i = 0; i < data.length; i++) {
+                    html += '<option value="' + data[i].IdCiudad + '">' + data[i].Nombre + '</option>';
+                }
+                $('#IdCiudad').html(html);
+            });
+        });
+
+        $('#DiasCredito').change(function () {
+            if ($(this).val() == '0') $('#CupoCredito').val('0');
+        });
+    });
+</script>

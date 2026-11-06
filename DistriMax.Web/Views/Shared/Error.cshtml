@@ -1,0 +1,12 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Error";
+}
+<div class="panel panel-danger">
+    <div class="panel-heading">No se pudo completar la operación</div>
+    <div class="panel-body">
+        <p>@(Model != null && Model.Exception != null ? Model.Exception.Message : "Ocurrió un error inesperado.")</p>
+        <p class="text-muted small">Si el mensaje habla de un error 401, tu sesión con la API expiró: cierra sesión y vuelve a entrar.</p>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-default">Volver al inicio</a>
+    </div>
+</div>

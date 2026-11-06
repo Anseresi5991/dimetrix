@@ -1,0 +1,41 @@
+﻿@model List<UsuarioDTO>
+@{
+    ViewBag.Title = "Usuarios";
+}
+<div class="encabezado">
+    <h2 class="titulo">Usuarios</h2>
+    <a href="@Url.Action("Crear")" class="btn btn-dm">Crear usuario</a>
+</div>
+
+<table id="tblUsuarios" class="table table-striped table-condensed tabla-dm">
+    <thead>
+        <tr><th>Usuario</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Último acceso</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td><code>@u.Login</code></td>
+                <td>@u.Nombre</td>
+                <td>@u.Email</td>
+                <td>@u.Rol</td>
+                <td>@FormatoHelper.FechaHora(u.UltimoAcceso)</td>
+                <td>
+                    @if (u.Activo)
+                    {
+                        <span class="label label-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="label label-default">Inactivo</span>
+                    }
+                </td>
+                <td class="text-right"><a href="@Url.Action("Editar", new { id = u.IdUsuario })" class="btn btn-xs btn-default">Editar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () { DM.tabla('#tblUsuarios', { order: [[1, 'asc']] }); });
+</script>
