@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -104,6 +104,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Scripts\01_CreateDatabase.sql" />
+    <Content Include="Scripts\02_Tables.sql" />
+    <Content Include="Scripts\03_StoredProcedures.sql" />
+    <Content Include="Scripts\04_Views.sql" />
+    <Content Include="Scripts\05_SeedData.sql" />
+    <Content Include="Scripts\99_Verificacion.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
