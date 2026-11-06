@@ -12,7 +12,6 @@ namespace DistriMax.Web.Controllers
         {
             if (Session["Usuario"] == null) return RedirectToAction("Login", "Account");
 
-            // AP-14: el front consulta la base de datos directamente, saltándose la API
             string cs = ConfigurationManager.ConnectionStrings["DistriMaxDB"].ConnectionString;
             SqlConnection cn = new SqlConnection(cs);
             cn.Open();

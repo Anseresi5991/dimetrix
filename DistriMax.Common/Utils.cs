@@ -6,10 +6,8 @@ using System.Text.RegularExpressions;
 
 namespace DistriMax.Common
 {
-    // AP-10: clase "Dios". Aquí cae todo lo que no tiene dónde más ir.
     public static class Utils
     {
-        // AP-20: MD5 sin salt
         public static string Md5(string texto)
         {
             MD5 md5 = MD5.Create();
@@ -21,8 +19,6 @@ namespace DistriMax.Common
             }
             return sb.ToString();
         }
-
-        // AP-05: el cálculo del DV existe aquí, en la API (ApiUtils) y en el Web (FormatoHelper y JS)
         public static string CalcularDV(string nit)
         {
             if (string.IsNullOrEmpty(nit)) return "";

@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 
 namespace DistriMax.Api.Data
 {
-    // Acceso a datos "a la antigua". Sin using/Dispose (AP-28), sin async, devuelve DataTable (AP-27).
     public class DbHelper
     {
         public static string CadenaConexion = ConfigurationManager.ConnectionStrings["DistriMaxDB"].ConnectionString;
@@ -40,7 +39,6 @@ namespace DistriMax.Api.Data
             return ds;
         }
 
-        // AP-13: recibe SQL armado por concatenación desde los controllers
         public static DataTable EjecutarConsulta(string sql)
         {
             DataTable dt = new DataTable();

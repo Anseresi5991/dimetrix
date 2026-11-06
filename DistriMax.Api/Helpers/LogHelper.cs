@@ -4,7 +4,6 @@ using DistriMax.Api.Data;
 
 namespace DistriMax.Api.Helpers
 {
-    // AP-24: log casero, síncrono, a la BD, y si falla... no pasó nada.
     public class LogHelper
     {
         public static void Log(int idUsuario, string modulo, string accion, string detalle)

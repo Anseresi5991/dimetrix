@@ -1,7 +1,5 @@
 ﻿namespace DistriMax.Common
 {
-    // Constantes "globales". Ojo: buena parte del código NO las usa y repite
-    // los valores a mano (AP-07, AP-08).
     public class Constantes
     {
         public const int ROL_ADMIN = 1;

@@ -26,7 +26,6 @@ DM.formatoMoneda = function (valor) {
     return '$' + n.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 };
 
-// AP-05: cuarta copia del cálculo del DV (las otras están en Common, Api y Web)
 function calcularDV(nit) {
     if (!nit) return '';
     nit = nit.replace(/[^0-9]/g, '');

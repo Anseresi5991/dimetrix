@@ -7,7 +7,6 @@ using DistriMax.Api.Data;
 
 namespace DistriMax.Api.Controllers
 {
-    // Catálogos generales. Ninguno valida token (AP-04: "son datos públicos")
     [RoutePrefix("api/general")]
     public class GeneralController : ApiController
     {
@@ -32,7 +31,7 @@ namespace DistriMax.Api.Controllers
         public HttpResponseMessage Ciudades(string dpto = null)
         {
             string sql = "SELECT IdCiudad, IdDepartamento, Codigo, Nombre FROM Ciudades";
-            if (!string.IsNullOrEmpty(dpto)) sql += " WHERE IdDepartamento = " + dpto; // AP-13: dpto es string...
+            if (!string.IsNullOrEmpty(dpto)) sql += " WHERE IdDepartamento = " + dpto;
             sql += " ORDER BY Nombre";
             DataTable dt = DbHelper.EjecutarConsulta(sql);
             return Request.CreateResponse(HttpStatusCode.OK, dt);

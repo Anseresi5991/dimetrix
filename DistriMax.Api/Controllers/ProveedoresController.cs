@@ -10,7 +10,6 @@ using DistriMax.Common.DTOs;
 
 namespace DistriMax.Api.Controllers
 {
-    // Proveedores: todo con SQL concatenado (AP-13). Ningún SP.
     [RoutePrefix("api/proveedores")]
     public class ProveedoresController : ApiController
     {
@@ -29,7 +28,6 @@ namespace DistriMax.Api.Controllers
                 string sql = SELECT_BASE;
                 if (!string.IsNullOrEmpty(buscar))
                 {
-                    // AP-13: SQL injection de libro
                     sql += " WHERE p.RazonSocial LIKE '%" + buscar + "%' OR p.Nit LIKE '%" + buscar + "%'";
                 }
                 sql += " ORDER BY p.RazonSocial";
@@ -44,7 +42,6 @@ namespace DistriMax.Api.Controllers
             }
         }
 
-        // AP-11: devuelve una LISTA con un solo elemento dentro de RespuestaDTO
         [HttpGet]
         [Route("{id:int}")]
         public HttpResponseMessage Obtener(int id)
@@ -76,7 +73,6 @@ namespace DistriMax.Api.Controllers
                 string idCiudad = p.IdCiudad.HasValue ? p.IdCiudad.Value.ToString() : "NULL";
                 string sql;
 
-                // AP-13: solo la razón social escapa comillas; el resto se va "derecho"
                 if (p.Proveedor_Id == 0)
                 {
                     object existe = DbHelper.EjecutarEscalar("SELECT COUNT(*) FROM Proveedor WHERE Nit = '" + p.Nit + "'");

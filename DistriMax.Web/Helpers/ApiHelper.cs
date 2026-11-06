@@ -13,7 +13,6 @@ namespace DistriMax.Web.Helpers
     {
         public static string UrlApi = ConfigurationManager.AppSettings["UrlApi"];
 
-        // AP-03: un HttpClient nuevo por cada llamada (agota sockets bajo carga)
         private static HttpClient CrearCliente()
         {
             HttpClient client = new HttpClient();
@@ -26,8 +25,6 @@ namespace DistriMax.Web.Helpers
             return client;
         }
 
-        // AP-16: sync over async con .Result
-        // BUG-03: si el token expiró, esto lanza una excepción genérica en vez de mandar al login
         public static T Get<T>(string url)
         {
             HttpClient client = CrearCliente();
@@ -71,7 +68,6 @@ namespace DistriMax.Web.Helpers
             }
             catch
             {
-                // AP-18: si no es RespuestaDTO, se arma una a mano
             }
 
             if (r == null)

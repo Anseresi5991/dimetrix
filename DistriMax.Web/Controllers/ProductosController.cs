@@ -67,7 +67,6 @@ namespace DistriMax.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Regla de negocio en el front: el precio no puede ser menor al costo + 5% (AP-07)
             if (model.CostoPromedio > 0 && model.PrecioBase < model.CostoPromedio * 1.05m)
             {
                 ViewBag.Error = "El precio base debe ser al menos 5% mayor al costo promedio (" + FormatoHelper.Moneda(model.CostoPromedio) + ")";

@@ -27,13 +27,11 @@ namespace DistriMax.Web.Helpers
             return fecha.HasValue ? fecha.Value.ToString("dd/MM/yyyy hh:mm tt") : "";
         }
 
-        // Para inputs type=number: la cultura es-CO usa coma decimal y rompe el input (bug clásico)
         public static string TextoInput(decimal valor)
         {
             return valor.ToString("0", CultureInfo.InvariantCulture);
         }
 
-        // AP-05: tercera copia del cálculo del DV (la cuarta está en distrimax.js)
         public static string DigitoVerificacion(string nit)
         {
             if (string.IsNullOrEmpty(nit)) return "";

@@ -3,10 +3,8 @@ using System.Data.SqlClient;
 
 namespace DistriMax.Api.Helpers
 {
-    // Otra clase de utilidades (además de DistriMax.Common.Utils). AP-10.
     public class ApiUtils
     {
-        // AP-05: copia del cálculo del DV, escrita distinto pero "hace lo mismo"
         public static string DigitoVerificacion(string nit)
         {
             if (nit == null) return null;

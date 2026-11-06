@@ -18,7 +18,7 @@ namespace DistriMax.Api.Controllers
         {
             if (TokenHelper.ValidarToken(Request) == 0) return Unauthorized();
 
-            DistriMaxEntities db = new DistriMaxEntities(); // AP-28: nunca se hace Dispose
+            DistriMaxEntities db = new DistriMaxEntities();
 
             var query = from p in db.Productos
                         join c in db.Categorias on p.IdCategoria equals c.IdCategoria
@@ -96,7 +96,7 @@ namespace DistriMax.Api.Controllers
             try
             {
                 if (p == null || string.IsNullOrEmpty(p.Codigo) || string.IsNullOrEmpty(p.Nombre))
-                    return Ok(new RespuestaDTO { ok = false, mensaje = "Código y nombre son obligatorios" }); // AP-11: error con 200 OK
+                    return Ok(new RespuestaDTO { ok = false, mensaje = "Código y nombre son obligatorios" });
                 if (p.PorcIva != 0 && p.PorcIva != 5 && p.PorcIva != 19)
                     return Ok(new RespuestaDTO { ok = false, mensaje = "El IVA debe ser 0, 5 o 19" });
                 if (p.PrecioBase <= 0)

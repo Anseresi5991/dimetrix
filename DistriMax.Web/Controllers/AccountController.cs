@@ -37,7 +37,6 @@ namespace DistriMax.Web.Controllers
 
                 UsuarioDTO u = ApiHelper.ConvertirData<UsuarioDTO>(resp.data);
 
-                // AP-23: todo a la sesión
                 Session["Usuario"] = u;
                 Session["Token"] = u.Token;
                 Session["IdRol"] = u.IdRol;

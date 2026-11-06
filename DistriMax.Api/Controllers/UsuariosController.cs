@@ -25,7 +25,7 @@ namespace DistriMax.Api.Controllers
             try
             {
                 DataTable dt = DbHelper.EjecutarSP("sp_Usuarios_Listar");
-                return Request.CreateResponse(HttpStatusCode.OK, dt); // AP-11 / AP-27
+                return Request.CreateResponse(HttpStatusCode.OK, dt);
             }
             catch (Exception ex)
             {
@@ -70,7 +70,6 @@ namespace DistriMax.Api.Controllers
             if (idUsuario == 0)
                 return Request.CreateResponse(HttpStatusCode.Unauthorized, new RespuestaDTO { ok = false, mensaje = "Token inválido o expirado" });
 
-            // AP-08: el 3 es "Vendedor"
             DataTable dt = DbHelper.EjecutarConsulta("SELECT IdUsuario, Nombre FROM Usuarios WHERE IdRol = 3 AND Activo = 1 ORDER BY Nombre");
             return Request.CreateResponse(HttpStatusCode.OK, dt);
         }

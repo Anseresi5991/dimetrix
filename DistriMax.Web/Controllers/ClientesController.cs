@@ -65,7 +65,7 @@ namespace DistriMax.Web.Controllers
             c.Activo = true;
             c.TipoDocumento = "NIT";
             c.DiasCredito = 30;
-            c.IdLista = 2; // AP-07: "Minorista" quemado como lista por defecto
+            c.IdLista = 2;
             if (rol == 3) c.IdVendedor = ((UsuarioDTO)Session["Usuario"]).IdUsuario;
 
             CargarCombos(null);
@@ -87,7 +87,6 @@ namespace DistriMax.Web.Controllers
             return View("Form", c);
         }
 
-        // AP-01 / AP-21: action gorda con reglas de negocio, permisos y validaciones
         [HttpPost]
         public ActionResult Guardar(ClienteDTO model)
         {
@@ -127,7 +126,6 @@ namespace DistriMax.Web.Controllers
                 }
             }
 
-            // AP-07: tope de cupo quemado para gerencia/cartera (solo admin lo supera)
             if (rol != 1 && model.CupoCredito > 100000000)
                 error += "El cupo máximo permitido es $100.000.000. Solicítalo al administrador. ";
 

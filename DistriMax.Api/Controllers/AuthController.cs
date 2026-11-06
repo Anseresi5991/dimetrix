@@ -23,7 +23,6 @@ namespace DistriMax.Api.Controllers
         {
             try
             {
-                // El único endpoint que valida el ApiKey (los demás no, AP-04)
                 if (!TokenHelper.ValidarApiKey(Request))
                 {
                     return Request.CreateResponse(HttpStatusCode.Unauthorized, new RespuestaDTO { ok = false, mensaje = "ApiKey inválida" });
@@ -49,7 +48,6 @@ namespace DistriMax.Api.Controllers
                 string token = Guid.NewGuid().ToString();
                 int horas = Convert.ToInt32(ConfigurationManager.AppSettings["TokenHorasExpiracion"]);
 
-                // AP-13: UPDATE armado a mano
                 DbHelper.EjecutarComando("UPDATE Usuarios SET Token = '" + token + "', TokenExpira = DATEADD(HOUR, " + horas
                     + ", GETDATE()), UltimoAcceso = GETDATE() WHERE IdUsuario = " + r["IdUsuario"]);
 

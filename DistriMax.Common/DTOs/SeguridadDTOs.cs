@@ -7,8 +7,6 @@ namespace DistriMax.Common.DTOs
         public string Login { get; set; }
         public string Password { get; set; }
     }
-
-    // AP-22: se usa como entidad, como DTO de la API, como ViewModel y hasta se guarda en Session
     public class UsuarioDTO
     {
         public int IdUsuario { get; set; }

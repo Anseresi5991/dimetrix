@@ -51,7 +51,6 @@ namespace DistriMax.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            // AP-11: la API devuelve una lista con un elemento
             RespuestaDTO r = ApiHelper.Get<RespuestaDTO>("api/proveedores/" + id);
             List<ProveedorDTO> lista = ApiHelper.ConvertirData<List<ProveedorDTO>>(r.data);
             if (lista == null || lista.Count == 0)

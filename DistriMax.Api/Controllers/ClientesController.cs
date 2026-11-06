@@ -19,7 +19,6 @@ namespace DistriMax.Api.Controllers
         [Route("")]
         public HttpResponseMessage Listar(string buscar = null)
         {
-            // AP-04: validación de token copiada y pegada en cada action
             IEnumerable<string> tokens;
             if (!Request.Headers.TryGetValues("X-Token", out tokens))
                 return Request.CreateResponse(HttpStatusCode.Unauthorized, "Token requerido");
@@ -31,7 +30,7 @@ namespace DistriMax.Api.Controllers
             {
                 DataTable dt = DbHelper.EjecutarSP("sp_Clientes_Listar",
                     new SqlParameter("@Buscar", string.IsNullOrEmpty(buscar) ? (object)DBNull.Value : buscar));
-                return Request.CreateResponse(HttpStatusCode.OK, dt); // AP-11: devuelve el DataTable crudo
+                return Request.CreateResponse(HttpStatusCode.OK, dt);
             }
             catch (Exception ex)
             {
@@ -44,7 +43,6 @@ namespace DistriMax.Api.Controllers
         [Route("{id:int}")]
         public HttpResponseMessage Obtener(int id)
         {
-            // AP-04: misma validación, copiada
             IEnumerable<string> tokens;
             if (!Request.Headers.TryGetValues("X-Token", out tokens))
                 return Request.CreateResponse(HttpStatusCode.Unauthorized, "Token requerido");
@@ -58,7 +56,6 @@ namespace DistriMax.Api.Controllers
                 if (dt.Rows.Count == 0)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "Cliente no encontrado");
 
-                // AP-27: mapeo manual del DataRow
                 DataRow r = dt.Rows[0];
                 ClienteDTO c = new ClienteDTO();
                 c.IdCliente = Convert.ToInt32(r["IdCliente"]);
@@ -99,7 +96,6 @@ namespace DistriMax.Api.Controllers
         [Route("")]
         public HttpResponseMessage Guardar(ClienteDTO c)
         {
-            // AP-04: otra vez
             IEnumerable<string> tokens;
             if (!Request.Headers.TryGetValues("X-Token", out tokens))
                 return Request.CreateResponse(HttpStatusCode.Unauthorized, "Token requerido");
@@ -113,12 +109,10 @@ namespace DistriMax.Api.Controllers
                 if (c == null)
                     return Request.CreateResponse(HttpStatusCode.BadRequest, new RespuestaDTO { ok = false, mensaje = "Datos vacíos" });
 
-                // AP-01: validaciones de negocio dentro del controller
                 string errores = "";
                 if (string.IsNullOrEmpty(c.RazonSocial)) errores += "La razón social es obligatoria. ";
                 if (!ApiUtils.SoloNumeros(c.NumeroDocumento)) errores += "El número de documento es obligatorio y solo admite números. ";
                 if (c.TipoDocumento != "NIT" && c.TipoDocumento != "CC") errores += "Tipo de documento inválido. ";
-                // AP-05: validación de email distinta a la del front (aquí solo se mira la @)
                 if (!string.IsNullOrEmpty(c.Email) && !c.Email.Contains("@")) errores += "El email no es válido. ";
                 if (c.CupoCredito < 0) errores += "El cupo no puede ser negativo. ";
                 if (c.DiasCredito < 0 || c.DiasCredito > 120) errores += "Los días de crédito deben estar entre 0 y 120. ";
@@ -175,7 +169,6 @@ namespace DistriMax.Api.Controllers
         [Route("{id:int}/saldo")]
         public HttpResponseMessage Saldo(int id)
         {
-            // Este se le "olvidó" validar el token a alguien (AP-04)
             try
             {
                 DataTable dt = DbHelper.EjecutarSP("sp_Clientes_SaldoCartera", new SqlParameter("@IdCliente", id));

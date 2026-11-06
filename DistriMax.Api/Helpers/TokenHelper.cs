@@ -20,14 +20,13 @@ namespace DistriMax.Api.Helpers
                 string token = valores.FirstOrDefault();
                 if (string.IsNullOrEmpty(token)) return 0;
 
-                // AP-13: token concatenado directo en el SQL
                 DataTable dt = DbHelper.EjecutarConsulta("SELECT IdUsuario FROM Usuarios WHERE Token = '" + token + "' AND TokenExpira > GETDATE() AND Activo = 1");
                 if (dt.Rows.Count == 0) return 0;
                 return Convert.ToInt32(dt.Rows[0]["IdUsuario"]);
             }
             catch
             {
-                return 0; // AP-18
+                return 0;
             }
         }
 
