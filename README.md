@@ -1,10 +1,4 @@
-﻿# DistriMax (proyecto legacy de práctica)
-
-Sistema de gestión para una distribuidora mayorista, construido **a propósito** como un sistema legacy en .NET Framework 4.8: funciona bien, pero por dentro tiene deuda técnica catalogada (`// AP-XX` en el código) para practicar refactorización y migración a .NET moderno.
-
-La especificación completa está en `docs/DistriMax_Especificacion_Tecnica.md`.
-
-## Requisitos
+﻿## Requisitos
 
 - Windows con Visual Studio 2022 (workload **ASP.NET and web development** y el targeting pack de **.NET Framework 4.8**).
 - SQL Server LocalDB (viene con Visual Studio) o SQL Server Express.
@@ -38,10 +32,3 @@ Para probar que la API responde: `http://localhost:5301/api/general/ping`.
 
 Listo: base de datos completa (tablas, 27 SPs, vistas y ~6 meses de datos simulados), seguridad (login con token, sesión, menú por rol), usuarios, clientes, proveedores, productos y el tablero de inicio.
 
-Pendiente (próximas fases): inventario, compras, pedidos, facturación, cartera y reportes. Los SPs de esos módulos ya existen en la base de datos.
-
-## Problemas comunes
-
-- **"No fue posible conectar con el servidor de la API"**: la API no está corriendo. Revisa el paso 3.
-- **Error 401 después de un rato**: el token de la API expiró (8 horas) y el front no lo maneja bien. Es el BUG-03 documentado; cierra sesión y vuelve a entrar.
-- **Error de puertos**: si 5300/5301 están ocupados, cámbialos en *Propiedades del proyecto → Web* y actualiza `UrlApi` en el `Web.config` del front.
